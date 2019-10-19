@@ -2,6 +2,8 @@
 
 Animated typing library built in ReasonML.
 
+[Demo](https://jrdrg.github.io/re-typed/)
+
 # Build
 
 ```
@@ -14,7 +16,3 @@ yarn build
 yarn start
 yarn webpack
 ```
-
-# Editor
-
-If you use `vscode`, Press `Windows + Shift + B` it will build automatically

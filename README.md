@@ -1,4 +1,4 @@
-# re-type
+# re-typed
 
 Animated typing library built in ReasonML.
 

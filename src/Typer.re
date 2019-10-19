@@ -21,16 +21,41 @@ let wait_ = (ms: int, op) =>
     ();
   });
 
+let replaceNewlines = str => {
+  str |> Js.String.replace("\n", "<br />");
+};
+
+let parseHtml = (idx, str) => {
+  let substr = String.sub(str, 0, idx);
+  switch (String.rindex(substr, '<')) {
+  | foundIdx when foundIdx === idx - 1 =>
+    switch (String.index_from(str, foundIdx, '>')) {
+    | closingBracketPos =>
+      let idx' = closingBracketPos + 1;
+      let substr' = String.sub(str, 0, idx');
+      (substr', idx');
+    | exception _ =>
+      Js.log("EXCEPTION!");
+      (substr, idx);
+    }
+  | _ => (substr, idx)
+  | exception Not_found => (substr, idx)
+  };
+};
+
 let write_ = (idx: int, text: string, ~preserve: bool, t) => {
-  let initialText = preserve ? Document.getInnerText(t.el) : "";
+  let initialText = preserve ? Document.getInnerHtml(t.el) : "";
   Js.Promise.make((~resolve, ~reject as _) => {
     let rec writeRec = (idx: int, text: string, t) => {
       setTimeout(
         () =>
           if (idx <= String.length(text)) {
+            let (parsed, idx) = parseHtml(idx, text);
+
             initialText
-            ++ String.sub(text, 0, idx)
-            |> Document.setInnerText(t.el);
+            ++ replaceNewlines(parsed)
+            |> Document.setInnerHtml(t.el);
+
             writeRec(idx + 1, text, t) |> ignore;
           } else {
             Js.log("Next");
@@ -54,7 +79,7 @@ let write_ = (idx: int, text: string, ~preserve: bool, t) => {
 let make = el => {
   el,
   text: [],
-  timeout: 30,
+  timeout: 60,
   timeoutId: None,
   current: Js.Promise.resolve(Init),
 };
@@ -89,3 +114,12 @@ let waitForPromise = (promise: Js.Promise.t(unit), t) => {
 
   {...t, current};
 };
+
+let rec foo = x =>
+  if (x <= 1) {
+    0;
+  } else {
+    foo(x - 1);
+  };
+
+foo(3);

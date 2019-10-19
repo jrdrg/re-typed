@@ -19,6 +19,6 @@ module Document = {
   [@bs.scope "document"] [@bs.val]
   external createElement: string => dom = "createElement";
 
-  [@bs.get] external getInnerText: dom => string = "textContent";
-  [@bs.set] external setInnerText: (dom, string) => unit = "textContent";
+  [@bs.get] external getInnerHtml: dom => string = "innerHTML";
+  [@bs.set] external setInnerHtml: (dom, string) => unit = "innerHTML";
 };

@@ -34,9 +34,7 @@ let parseHtml = (idx, str) => {
       let idx' = closingBracketPos + 1;
       let substr' = String.sub(str, 0, idx');
       (substr', idx');
-    | exception _ =>
-      Js.log("EXCEPTION!");
-      (substr, idx);
+    | exception _ => (substr, idx)
     }
   | _ => (substr, idx)
   | exception Not_found => (substr, idx)
@@ -58,12 +56,8 @@ let write_ = (idx: int, text: string, ~preserve: bool, t) => {
 
             writeRec(idx + 1, text, t) |> ignore;
           } else {
-            Js.log("Next");
-            Js.log(t.text);
             switch (t.text) {
-            | [head, ...rest] =>
-              Js.log3("writing next string", head, List.length(rest));
-              resolve(. Text(head));
+            | [head, ..._rest] => resolve(. Text(head))
             | [] =>
               Js.log("empty array");
               resolve(. Done);
@@ -72,16 +66,45 @@ let write_ = (idx: int, text: string, ~preserve: bool, t) => {
         t.timeout,
       );
     };
-    Js.log2("__writing__", text);
     writeRec(idx, text, t) |> ignore;
   });
 };
+
+let appendCursor = el => {
+  let style = Document.createElement("style");
+  "#re-typed-text:after {
+    animation: re-typed-blinker 0.7s step-end infinite;
+    content: '|';
+    color: white;
+    font-weight: bold;
+   }
+
+  @keyframes re-typed-blinker {
+   50% {
+    opacity: 0;
+   }
+  }"
+  |> Document.setInnerHtml(style);
+
+  let textNode = Document.createElement("span");
+  Document.setId(textNode, "re-typed-text");
+
+  el->Document.appendChild(textNode);
+  el->Document.appendChild(style);
+
+  textNode;
+};
+
 let make = el => {
-  el,
-  text: [],
-  timeout: 60,
-  timeoutId: None,
-  current: Js.Promise.resolve(Init),
+  Document.setInnerHtml(el, "");
+  let textEl = appendCursor(el);
+  {
+    el: textEl,
+    text: [],
+    timeout: 40,
+    timeoutId: None,
+    current: Js.Promise.resolve(Init),
+  };
 };
 
 let write = (text, ~preserve: bool=false, t) => {
@@ -91,10 +114,8 @@ let write = (text, ~preserve: bool=false, t) => {
     |> Js.Promise.then_(o =>
          switch (o) {
          | Init => write_(~preserve, 0, text, t')
-         | Text(_) => write_(~preserve, 0, text ++ " ", t')
-         | Done =>
-           Js.log("??????");
-           Js.Promise.resolve(Done);
+         | Text(_) => write_(~preserve, 0, " " ++ text, t')
+         | Done => Js.Promise.resolve(Done)
          }
        );
 
@@ -114,12 +135,3 @@ let waitForPromise = (promise: Js.Promise.t(unit), t) => {
 
   {...t, current};
 };
-
-let rec foo = x =>
-  if (x <= 1) {
-    0;
-  } else {
-    foo(x - 1);
-  };
-
-foo(3);

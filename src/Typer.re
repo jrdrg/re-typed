@@ -72,7 +72,7 @@ let write_ = (idx: int, text: string, ~preserve: bool, t) => {
 
 let appendCursor = el => {
   let style = Document.createElement("style");
-  "#re-typed-text:after {
+  ".re-typed-text:after {
     animation: re-typed-blinker 0.7s step-end infinite;
     content: '|';
     color: white;
@@ -87,7 +87,7 @@ let appendCursor = el => {
   |> Document.setInnerHtml(style);
 
   let textNode = Document.createElement("span");
-  Document.setId(textNode, "re-typed-text");
+  Document.setClassName(textNode, "re-typed-text");
 
   el->Document.appendChild(textNode);
   el->Document.appendChild(style);

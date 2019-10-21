@@ -20,6 +20,8 @@ module Document = {
   [@bs.scope "document"] [@bs.val]
   external createElement: string => dom = "createElement";
 
+  [@bs.set] external setClassName: (dom, string) => unit = "className";
+
   [@bs.set] external setId: (dom, string) => unit = "id";
 
   [@bs.get] external getInnerHtml: dom => string = "innerHTML";

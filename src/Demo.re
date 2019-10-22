@@ -20,7 +20,9 @@ switch (Document.querySelector("#root")) {
        ~preserve=true,
      )
   |> Typer.wait(500)
-  |> Typer.write("This text <b>has bold</b> and <i>italic</i> words.")
+  |> Typer.write(
+       "This text <strong>has bold</strong> and <em>italic</em> words.",
+     )
   |> Typer.write(
        "\nThis <span style=\"color:red;\">has red</b> words.",
        ~preserve=true,

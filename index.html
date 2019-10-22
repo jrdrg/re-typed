@@ -2,6 +2,11 @@
 	<head>
 		<title>demo</title>
 		<style>
+			body {
+				padding: 0;
+				margin: 0;
+				font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+			}
 			#root {
 				color: white;
 				background-color: black;
@@ -14,7 +19,12 @@
 				border-radius: 15px;
 				box-shadow: 3px 3px 13px 1px black;
 				border: 1px solid white;
-				font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+			}
+			.header {
+				background: brown;
+				padding: 20px;
+				color: white;
+				font-weight: bold;
 			}
 			.re-typed-text {
 				font-size: 1em;
@@ -22,6 +32,7 @@
 		</style>
 	</head>
 	<body>
+		<div class="header">re-typed</div>
 		<div id="root"/>
 	</body>
 	<script src="./dist/main.js"></script>

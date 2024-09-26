@@ -14,7 +14,7 @@
   "license": "MIT",
   "devDependencies": {
     "bs-platform": "^5.0.6",
-    "rollup": "^1.25.0",
+    "rollup": "^2.79.2",
     "rollup-plugin-bucklescript": "^0.7.0",
     "rollup-plugin-uglify": "^6.0.3"
   }
